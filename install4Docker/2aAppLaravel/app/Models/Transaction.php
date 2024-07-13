@@ -5,6 +5,8 @@ namespace App\Models;
 use App\Enums\TransactionStatus;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
+
 
 class Transaction extends Model
 {
@@ -20,5 +22,10 @@ class Transaction extends Model
     protected $casts = [
         'status' => TransactionStatus::class
     ];
+
+    public function signature()
+    {
+        return $this->belongsTo(Signature::class);
+    }
 
 }
