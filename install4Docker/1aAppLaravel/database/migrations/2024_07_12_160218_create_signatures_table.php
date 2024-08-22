@@ -17,6 +17,7 @@ return new class extends Migration
             $table->foreignId('plan_id')->constrained();
             $table->smallInteger('status');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
