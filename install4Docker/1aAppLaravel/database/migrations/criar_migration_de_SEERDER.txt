@@ -1,0 +1,22 @@
+[1] criar a migration
+#> ./sail art make:seeder UserSeeder
+INFO  Seeder [database/seeders/UserSeeder.php] created successfully.
+
+[2] alterar o DatabaseSeeder.php
+
+
+[3] executar o DatabaseSeeder com
+#> ./sail art db:seed
+
+
+(*) Cada execução insere um UserSeeder
+
+
+[4] ao invés de usar db:seed - usar Factories
+#> ./sail art make:factory ClientFactory
+INFO  Factory [database/factories/ClientFactory.php] created successfully.
+
+
+
+
+

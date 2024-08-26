@@ -1,0 +1,15 @@
+User::all() -> recupera todos os registros da tabela/model
+
+User::find(n) -> recupera o registro com ID = n
+
+User::limit(n)->get() // recupera os registros até o limite n
+
+User::select( 'colunaA', 'colunaB' )->get() -> especifica quais colunasNome quer retornar em cada registro
+
+User::count() -> traz o numero de resgistro da consulta
+
+User::findOrFail( 35 ) -> lança uma exceção ModelNotFoundException caso não encontre o registro
+
+User::findOr( 35, fn() => 'Registro não encontrado !!!' ) lança uma exceção customizada (com uma Closure) caso não encontre o registro
+
+

@@ -1,0 +1,57 @@
+sail art make:migration <padrao-de-nome>
+ou
+php artisan make:migration <padrao-de-nome>
+
+Exemplo:
+
+./sail art make:migration alter_clients_table
+
+ INFO  Migration [database/migrations/2024_08_26_135316_alter_clients_table.php] created successfully.
+
+ Na migration criada ....
+
+[1] Usar o Up para incluir uma coluna com :
+
+    public function up(): void
+    {
+        // Schema é o template de BD que o Laravel deve usar
+        Schema::table( 'clients', function( Blueprint $tabela ) {
+            // Aqui está sendo solicitada a adição / criação de uma nova coluna
+            // chamada UUID, com este nome e este tipo de dado
+            // e ser disposta na tabela, logo após a coluna ID
+            $tabela->uuid()->after( 'id' );
+        });
+    }
+
+
+
+[2] Usar o Down para reverter a alteração
+    /**
+     * Reverse the migrations.
+     */
+    public function down(): void
+    {
+        Schema::dropColumns( 'clients', ['uuid'] );
+    }
+
+
+Para executar, use :
+
+./sail art migrate
+
+Que Resulta em :
+
+mysql> desc clients;
++------------+-----------------+------+-----+---------+----------------+
+| Field      | Type            | Null | Key | Default | Extra          |
++------------+-----------------+------+-----+---------+----------------+
+| id         | bigint unsigned | NO   | PRI | NULL    | auto_increment |
+| uuid       | char(36)        | NO   |     | NULL    |                |
+| user_id    | bigint unsigned | NO   | MUL | NULL    |                |
+| document   | varchar(255)    | NO   |     | NULL    |                |
+| birthdate  | date            | YES  |     | NULL    |                |
+| created_at | timestamp       | YES  |     | NULL    |                |
+| updated_at | timestamp       | YES  |     | NULL    |                |
+| deleted_at | timestamp       | YES  |     | NULL    |                |
++------------+-----------------+------+-----+---------+----------------+
+
