@@ -1,3 +1,6 @@
+CONSULTAS
+===============================================================================
+
 User::all() -> recupera todos os registros da tabela/model
 
 User::find(n) -> recupera o registro com ID = n
@@ -11,5 +14,63 @@ User::count() -> traz o numero de resgistro da consulta
 User::findOrFail( 35 ) -> lança uma exceção ModelNotFoundException caso não encontre o registro
 
 User::findOr( 35, fn() => 'Registro não encontrado !!!' ) lança uma exceção customizada (com uma Closure) caso não encontre o registro
+
+
+FILTROS
+===============================================================================
+=> WHERE
+User::where( 'name', 'like', 'Dr%' )->get()
+
+=> WHERE e AND
+User::where( 'email', 'like', '%.org' )->Where( 'name', 'like', '%A%' )->get()
+User::where( [ ['email', 'like', '%.org'], ['name', 'like', '%A%'] ] )->get()
+
+=> WHERE e OR
+User::where( 'name', 'like', 'Dr%' )->orWhere( 'name', 'like', 'Sr%' )->get()
+
+=> WHERE email .org E ( Dr ou Sr )
+User::where( 'email', 'like', '%.org' )
+    ->where( function( $query ) {
+        $query->where('name', 'like', 'Dr%' )
+              ->orWhere( 'name', 'like', 'Sr%' );
+    })
+    ->get()
+
+
+RELACIONAMENTOS
+===============================================================================
+
+=> Recuperar dados em tabelas relacionadas
+User::with('client')->first()
+$user = User::with('client')->first()
+$user->name
+
+=> Recuperar dados em tabelas relacionadas usando uma Closure
+$user = User::select( 'name', 'id' )
+            ->with( [
+                'client' => function( $cli ) {
+                    $cli->select( 'user_id', 'document', 'birthdate' );
+                }
+            ])->first();
+$user->name . ' - ' . $user->client->document . ' - ' . $user->client->birthdate
+
+=> Recuperar dados em tabelas relacionadas sem Closure (mais restrito)
+$user = User::select( 'name', 'id' )->with( 'client:user_id,document,birthdate' )->first();
+$user->name . ' - ' . $user->client->document . ' - ' . $user->client->birthdate
+
+=> Recuperar dados em tabelas relacionadas com Alias da SQL
+$user = User::select( 'name AS nome', 'id' )->with( 'client:user_id,document AS cpf,birthdate AS nascimento' )->first();
+$user->nome . ' - ' . $user->client->cpf . ' - ' . $user->client->nascimento
+
+=> Lazy query
+=> Consultar "depois" a tabela relacionada. As consultas são feitas em momentos diferentes
+$user = User::first(); // momento 1
+...
+$user->client
+
+
+QUERY BUILDER
+===============================================================================
+
 
 
