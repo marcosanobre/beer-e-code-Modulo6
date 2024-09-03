@@ -1,3 +1,6 @@
+
+./sail tintker
+
 CONSULTAS
 ===============================================================================
 
@@ -72,5 +75,14 @@ $user->client
 QUERY BUILDER
 ===============================================================================
 
+=> Join com a Facade DB
+DB::table('users')
+    ->join( 'clients', 'user_id', '=', 'clients.user_id' )
+    ->get();
+
+DB::table('users')
+    ->join( 'clients', 'user_id', '=', 'clients.user_id' )
+    ->select( 'users.name AS nome', 'clients.document AS cpf', 'clients.birthdate AS nascimento' )
+    ->get();
 
 
